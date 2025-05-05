@@ -18,7 +18,7 @@ Bu script ile YouTube, TikTok, Instagram ve benzeri platformlardan kolayca video
 
 Scriptin son halini `.zip` olarak aşağıdaki bağlantıdan indirebilirsiniz:
 
-[Otomatik Video İndirme Scriptini İndir (ZIP)](https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/archive/refs/heads/main.zip)
+[Otomatik Video İndirme Scriptini İndir](https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/archive/refs/heads/main.zip)
 
 > İndirdikten sonra ZIP arşivini çıkartın. İçindeki `.bat` dosyasına çift tıklayarak kullanabilirsiniz.
 
@@ -41,7 +41,7 @@ Scriptin son halini `.zip` olarak aşağıdaki bağlantıdan indirebilirsiniz:
 
 Script tamamen açık ve şeffaftır. Not Defteri ile açarak içeriğini inceleyebilirsiniz.
 
-[Virustotal Tarama Sonucu (gönüllü paylaşım)](https://www.virustotal.com/gui/file/1f5c792607b10dbde253f91c75cbf4fa55cfe674d5684aa6f99569608927f51d)
+[Virustotal Tarama Sonucu](https://www.virustotal.com/gui/file/1f5c792607b10dbde253f91c75cbf4fa55cfe674d5684aa6f99569608927f51d)
 
 > Bazı antivirüs sistemleri otomatik çalışan scriptlere uyarı verebilir. Ancak scriptte herhangi bir kötü amaçlı yazılım bulunmamaktadır.
 
