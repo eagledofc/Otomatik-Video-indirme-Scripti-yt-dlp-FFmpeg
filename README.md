@@ -14,7 +14,7 @@ Bu script, YouTube, TikTok, Instagram ve benzeri platformlardan video ya da ses 
 
 Aşağıdaki bağlantıdan `.bat` dosyasını doğrudan indirebilirsiniz:
 
-[Video İndirme Scriptini İndir (.bat)](https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/raw/main/OFC%20Video%20%C4%B0ndirme%20Arac%C4%B1/V%C4%B0deo%20%C4%B0ndirme.bat)
+[Video İndirme Scriptini İndir (.bat)](blob:https://github.com/f540882f-e751-462d-aff1-4264b5c6d674)
 
 > Dosyayı indirdikten sonra çift tıklayarak çalıştırabilirsiniz.
 
