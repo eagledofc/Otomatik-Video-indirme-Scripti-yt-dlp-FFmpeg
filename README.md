@@ -1,41 +1,39 @@
 # Otomatik Video İndirme Scripti (.bat) [yt-dlp + FFmpeg]
 
-Bu repo, kendi hazırladığım bir `.bat` dosyasını içeriyor. Amacı, internetten video veya ses indirme işlemini tamamen otomatik hale getirmek. Hiçbir ek programa gerek yok — `yt-dlp` ve `ffmpeg` dosyalarını script kendisi indiriyor. Kullanıcı sadece bağlantıyı giriyor, gerisini script hallediyor.
+Bu script, YouTube, TikTok, Instagram ve benzeri platformlardan video ya da ses dosyası indirmenizi sağlar. Gerekli araçları (yt-dlp ve ffmpeg) otomatik olarak indirir, kurulum gerektirmez. Kullanıcı sadece bağlantıyı girer, işlem tamamen otomatiktir.
 
-## 🚀 Özellikler
+## Özellikler
 
-- Youtube, TikTok, Instagram, Twitter gibi platformlardan içerik indirebilirsiniz.
-- `yt-dlp` ve `ffmpeg` otomatik olarak script tarafından indirilir.
-- Kurulum gerektirmez. Taşınabilir, çift tıkla çalışır.
-- Tamamen açık kaynak ve düzenlenebilir.
+- `yt-dlp` ve `ffmpeg` araçlarını otomatik indirir
+- Komut satırı üzerinden çalışır
+- Sadece bağlantıyı girmeniz yeterlidir
+- Taşınabilir ve kurulum gerektirmez
+- Açık kaynak, Not Defteri ile düzenlenebilir
 
-## 📄 Dosya
+## İndirme
 
-🔸 **[OFC Video İndirme Aracı]([https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/blob/main/OFC%20Video%20Indirme%20Aracı](https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/blob/main/OFC%20Video%20%C4%B0ndirme%20Arac%C4%B1/V%C4%B0deo%20%C4%B0ndirme.bat)**
-İçeriği bir `.bat` dosyasıdır. Not Defteri ile açıp tüm komutları görebilirsiniz. Şeffaf ve sade.
+Aşağıdaki bağlantıdan `.bat` dosyasını doğrudan indirebilirsiniz:
 
-## 🧪 VirusTotal Sonucu
+[Video İndirme Scriptini İndir (.bat)](https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/raw/main/OFC%20Video%20%C4%B0ndirme%20Arac%C4%B1/V%C4%B0deo%20%C4%B0ndirme.bat)
 
-Script tamamen düz metin komutlardan oluşuyor. Ancak bazı otomatik tespit sistemleri `.bat` veya `.exe` dosyalarını potansiyel olarak zararlı görebiliyor.
+> Dosyayı indirdikten sonra çift tıklayarak çalıştırabilirsiniz.
 
-🔗 [VirusTotal Sonucu (1 Mayıs 2025)](https://www.virustotal.com/gui/file/1f5c792607b10dbde253f91c75cbf4fa55cfe674d5684aa6f99569608927f51d)
+## Nasıl Kullanılır?
 
-> Script virüs içermez. Dilerseniz açıp satır satır kendiniz inceleyebilirsiniz.
+1. Yukarıdaki bağlantıdan `.bat` dosyasını indirin  
+2. Dosyaya çift tıklayın  
+3. Açılan siyah pencerede video/ses bağlantısını yapıştırın  
+4. Script gerekli araçları indirir ve videoyu indirir  
 
-## ⚙️ Nasıl Kullanılır?
+## VirusTotal Sonucu
 
-1. Sayfanın yukarısından `Code > Download ZIP` diyerek projeyi indir.
-2. `OFC Video Indirme Aracı` dosyasına çift tıkla.
-3. Açılan siyah pencerede bağlantıyı yapıştır.
-4. Script gerekli araçları indirir ve otomatik olarak çalıştırır.
+Script temizdir ve Not Defteri ile açılarak tamamen incelenebilir. Ancak otomatik sistemler tarafından potansiyel riskli olarak işaretlenebilir.
 
-## ⚠️ Uyarı
+Analiz sonucu:  
+[https://www.virustotal.com/gui/file/1f5c792607b10dbde253f91c75cbf4fa55cfe674d5684aa6f99569608927f51d](https://www.virustotal.com/gui/file/1f5c792607b10dbde253f91c75cbf4fa55cfe674d5684aa6f99569608927f51d)
 
-- Script yalnızca **kişisel kullanım** içindir.
-- Telif hakkına sahip içerikleri izinsiz indirmeniz **yasaldır ve sorumluluk size aittir**.
-- Bu repo eğitim ve otomasyon amaçlı paylaşılmıştır.
+## Uyarı
 
----
-
-📬 Her türlü soru, öneri ve katkı için `Issues` sekmesini kullanabilirsiniz.  
-Hazırlayan: [eagledofc](https://github.com/eagledofc)
+- Script yalnızca eğitim ve kişisel kullanım içindir.  
+- Telif hakkı olan içerikleri izinsiz indirmek yasal sorunlara neden olabilir.  
+- Kaynak kod açık ve düzenlenebilir durumdadır. Kullanmadan önce inceleyebilirsiniz.
