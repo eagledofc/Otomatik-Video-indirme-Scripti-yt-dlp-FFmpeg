@@ -1,4 +1,4 @@
-# Otomatik Video İndirme Scripti (.bat) [yt-dlp + FFmpeg]
+# Otomatik Video İndirme Scripti [yt-dlp + FFmpeg]
 
 Bu script ile YouTube, TikTok, Instagram ve benzeri platformlardan kolayca video veya ses dosyası indirebilirsiniz. Her şey otomatik gerçekleşir: Gerekli araçlar olan `yt-dlp` ve `ffmpeg` script tarafından arka planda indirilir ve çalıştırılır. Kullanıcı sadece bağlantıyı girer, işlem gerisini halleder.
 
