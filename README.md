@@ -11,7 +11,7 @@ Bu repo, kendi hazırladığım bir `.bat` dosyasını içeriyor. Amacı, intern
 
 ## 📄 Dosya
 
-🔸 **[OFC Video İndirme Aracı]([https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/blob/main/OFC%20Video%20Indirme%20Aracı](https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/blob/main/OFC%20Video%20%C4%B0ndirme%20Arac%C4%B1/V%C4%B0deo%20%C4%B0ndirme.bat))**  
+🔸 **[OFC Video İndirme Aracı]([https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/blob/main/OFC%20Video%20Indirme%20Aracı](https://github.com/eagledofc/Otomatik-Video-indirme-Scripti-.bat-yt-dlp-FFmpeg/blob/main/OFC%20Video%20%C4%B0ndirme%20Arac%C4%B1/V%C4%B0deo%20%C4%B0ndirme.bat)**
 İçeriği bir `.bat` dosyasıdır. Not Defteri ile açıp tüm komutları görebilirsiniz. Şeffaf ve sade.
 
 ## 🧪 VirusTotal Sonucu
