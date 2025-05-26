@@ -10,20 +10,19 @@ set "OUTDIR=%USERPROFILE%\Downloads"
 set "YTDLP_URL=https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe"
 set "FFMPEG_ZIP_URL=https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl-shared.zip"
 
-:: Klasör varsa geç, yoksa oluştur
 if not exist "%APPDIR%" mkdir "%APPDIR%"
 cd /d "%APPDIR%"
 
-:: yt-dlp yoksa indir
-if not exist "%YT_DLP_EXE%" (
+:: yt-dlp kontrol ve güncelleme
+if exist "%YT_DLP_EXE%" (
+    echo yt-dlp güncelleniyor...
+    "%YT_DLP_EXE%" -U >nul
+) else (
     echo yt-dlp indiriliyor...
     curl -L -o yt-dlp.exe "%YTDLP_URL%"
-) else (
-    echo yt-dlp güncellemeleri kontrol ediliyor...
-    "%YT_DLP_EXE%" -U >nul
 )
 
-:: ffmpeg yoksa indir
+:: ffmpeg kontrol ve güncelleme (güncelliği dosya varlığına göre belirlenir)
 if not exist "%FFMPEG_EXE%" (
     echo ffmpeg indiriliyor...
     curl -L -o ffmpeg.zip "%FFMPEG_ZIP_URL%"
@@ -32,7 +31,6 @@ if not exist "%FFMPEG_EXE%" (
     del ffmpeg.zip
 )
 
-:: URL al
 echo.
 <nul set /p="Video URL'sini yapıştır: "
 set /P URL=
@@ -44,20 +42,22 @@ if "%URL%"=="" (
 
 cd /D "%OUTDIR%"
 
-:: Video + ses indir ve mp4 olarak birleştir
 "%YT_DLP_EXE%" ^
  --ffmpeg-location "%FFMPEG_DIR%" ^
  -f "bv*+ba/bestvideo+bestaudio/best" ^
  --merge-output-format mp4 ^
- -o "%%(title)s.%%(ext)s" ^
+ --postprocessor-args "ffmpeg:-c:v copy -c:a libmp3lame -b:a 192k" ^
+ -o "%%(title)s.mp4" ^
  "%URL%"
 
 if errorlevel 1 (
     echo.
-    echo İndirme başarısız oldu. Format uyumsuzluğu olabilir.
+    echo İndirme veya dönüştürme sırasında bir hata oluştu.
     echo Formatları görmek için şu komutu çalıştırabilirsiniz:
     echo yt-dlp -F "%URL%"
 )
 
+echo.
+echo İndirme tamamlandı. Dosya: %OUTDIR%
 pause
 exit /b
