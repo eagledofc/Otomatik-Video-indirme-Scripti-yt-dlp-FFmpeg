@@ -13,18 +13,15 @@ set "FFMPEG_ZIP_URL=https://github.com/BtbN/FFmpeg-Builds/releases/latest/downlo
 if not exist "%APPDIR%" mkdir "%APPDIR%"
 cd /d "%APPDIR%"
 
-:: yt-dlp kontrol ve güncelleme
+:: yt-dlp kontrol/güncelle
 if exist "%YT_DLP_EXE%" (
-    echo yt-dlp güncelleniyor...
     "%YT_DLP_EXE%" -U >nul
 ) else (
-    echo yt-dlp indiriliyor...
     curl -L -o yt-dlp.exe "%YTDLP_URL%"
 )
 
-:: ffmpeg kontrol ve güncelleme (güncelliği dosya varlığına göre belirlenir)
+:: ffmpeg kontrol/güncelle
 if not exist "%FFMPEG_EXE%" (
-    echo ffmpeg indiriliyor...
     curl -L -o ffmpeg.zip "%FFMPEG_ZIP_URL%"
     mkdir ffmpeg
     tar -xf ffmpeg.zip -C ffmpeg
@@ -42,22 +39,22 @@ if "%URL%"=="" (
 
 cd /D "%OUTDIR%"
 
+:: Video + ses indir, Windows uyumlu MP4 oluştur (MP3 sesli)
 "%YT_DLP_EXE%" ^
  --ffmpeg-location "%FFMPEG_DIR%" ^
  -f "bv*+ba/bestvideo+bestaudio/best" ^
  --merge-output-format mp4 ^
- --postprocessor-args "ffmpeg:-c:v copy -c:a libmp3lame -b:a 192k" ^
+ --postprocessor-args "ffmpeg:-c:v libx264 -preset fast -crf 23 -c:a libmp3lame -b:a 192k" ^
  -o "%%(title)s.mp4" ^
  "%URL%"
 
 if errorlevel 1 (
     echo.
-    echo İndirme veya dönüştürme sırasında bir hata oluştu.
-    echo Formatları görmek için şu komutu çalıştırabilirsiniz:
-    echo yt-dlp -F "%URL%"
+    echo HATA: İndirme veya dönüştürme işlemi başarısız oldu.
+    echo Format listesi görmek için: yt-dlp -F "%URL%"
 )
 
 echo.
-echo İndirme tamamlandı. Dosya: %OUTDIR%
+echo İNDİRME TAMAMLANDI - Dosya konumu: %OUTDIR%
 pause
 exit /b
