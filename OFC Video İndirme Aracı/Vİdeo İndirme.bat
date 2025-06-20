@@ -37,15 +37,19 @@ if "%URL%"=="" (
     exit /b
 )
 
+:: Tarih damgası ekle (YılAyGün-SaatDakika)
+for /f "tokens=2 delims==." %%I in ('"wmic os get localdatetime /value"') do set ldt=%%I
+set "TIMESTAMP=%ldt:~0,4%-%ldt:~4,2%-%ldt:~6,2%_%ldt:~8,2%-%ldt:~10,2%"
+
 cd /D "%OUTDIR%"
 
-:: Video + ses indir, Windows uyumlu MP4 oluştur (MP3 sesli)
+:: Video + ses indir, hızlı ve kaliteli MP4 oluştur
 "%YT_DLP_EXE%" ^
  --ffmpeg-location "%FFMPEG_DIR%" ^
  -f "bv*+ba/bestvideo+bestaudio/best" ^
  --merge-output-format mp4 ^
- --postprocessor-args "ffmpeg:-c:v libx264 -preset fast -crf 23 -c:a libmp3lame -b:a 192k" ^
- -o "%%(title)s.mp4" ^
+ --postprocessor-args "ffmpeg:-c:v libx264 -preset veryfast -crf 22 -c:a aac -b:a 192k -movflags +faststart" ^
+ -o "%%(title)s_%TIMESTAMP%.mp4" ^
  "%URL%"
 
 if errorlevel 1 (
