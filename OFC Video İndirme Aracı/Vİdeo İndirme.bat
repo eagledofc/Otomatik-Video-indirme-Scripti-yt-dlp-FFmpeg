@@ -47,6 +47,7 @@ echo.
 echo En iyi kalite + en hızlı mod başlıyor...
 
 "%YT_DLP_EXE%" ^
+ --no-mtime ^
  --ffmpeg-location "%FFMPEG_DIR%" ^
  -f "bv*+ba/bestvideo+bestaudio/best" ^
  --merge-output-format mp4 ^
