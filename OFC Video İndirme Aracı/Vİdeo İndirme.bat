@@ -1,60 +1,40 @@
 @echo off
-chcp 65001 >nul
-setlocal enabledelayedexpansion
+REM === Gelişmiş Video+Ses İndirici ve FFmpeg Birleştirici ===
 
-set "APPDIR=%LOCALAPPDATA%\VideoDownloader"
-set "YT_DLP_EXE=%APPDIR%\yt-dlp.exe"
-set "FFMPEG_DIR=%APPDIR%\ffmpeg\ffmpeg-master-latest-win64-gpl-shared\bin"
-set "FFMPEG_EXE=%FFMPEG_DIR%\ffmpeg.exe"
-set "OUTDIR=%USERPROFILE%\Downloads"
-set "YTDLP_URL=https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe"
-set "FFMPEG_ZIP_URL=https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl-shared.zip"
+REM Kullanıcıdan URL ve tercih sor
+set /p URL="Lütfen video URL'sini yapıştır: "
+echo.
+echo Ne indirmek istiyorsun?
+echo [1] Sadece Video
+echo [2] Sadece Ses
+echo [3] Video + Ses (birleştir)
+set /p CHOICE="Seçiminizi girin (1/2/3): "
 
-if not exist "%APPDIR%" mkdir "%APPDIR%"
-cd /d "%APPDIR%"
+REM Geçici klasör
+set TMPDIR=%~dp0tmp
+if not exist %TMPDIR% mkdir %TMPDIR%
 
-:: yt-dlp kontrol/güncelle
-if exist "%YT_DLP_EXE%" (
-    "%YT_DLP_EXE%" -U >nul
-) else (
-    curl -L -o yt-dlp.exe "%YTDLP_URL%"
-)
+REM Çıktı dosya ismi
+set FILENAME=output_%RANDOM%
 
-:: ffmpeg kontrol/güncelle
-if not exist "%FFMPEG_EXE%" (
-    curl -L -o ffmpeg.zip "%FFMPEG_ZIP_URL%"
-    mkdir ffmpeg
-    tar -xf ffmpeg.zip -C ffmpeg
-    del ffmpeg.zip
+REM İndir ve işlem yap
+if "%CHOICE%"=="1" (
+    echo === SADECE VIDEO İNDİRİLİYOR ===
+    yt-dlp -f "bestvideo[ext=mp4]+bestaudio/best[ext=mp4]/best" -o "%FILENAME%.mp4" %URL%
+) else if "%CHOICE%"=="2" (
+    echo === SADECE SES İNDİRİLİYOR ===
+    yt-dlp -f "bestaudio" -o "%FILENAME%.m4a" %URL%
+) else if "%CHOICE%"=="3" (
+    echo === VIDEO + SES İNDİRİLİYOR ve BİRLEŞTİRİLİYOR ===
+    yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]" -o "%TMPDIR%\video.%%(ext)s" %URL%
+    yt-dlp -f "bestaudio[ext=m4a]" -o "%TMPDIR%\audio.%%(ext)s" %URL%
+    echo === FFmpeg Birleştirme Başlıyor ===
+    ffmpeg -i "%TMPDIR%\video.mp4" -i "%TMPDIR%\audio.m4a" -c copy "%FILENAME%.mp4"
+    echo === Geçici dosyalar siliniyor ===
+    del "%TMPDIR%\video.mp4"
+    del "%TMPDIR%\audio.m4a"
 )
 
 echo.
-<nul set /p="Video URL'sini yapıştır: "
-set /P URL=
-if "%URL%"=="" (
-    echo URL girilmedi. Çıkılıyor...
-    pause
-    exit /b
-)
-
-cd /D "%OUTDIR%"
-
-:: Video + ses indir, Windows uyumlu MP4 oluştur (MP3 sesli)
-"%YT_DLP_EXE%" ^
- --ffmpeg-location "%FFMPEG_DIR%" ^
- -f "bv*+ba/bestvideo+bestaudio/best" ^
- --merge-output-format mp4 ^
- --postprocessor-args "ffmpeg:-c:v libx264 -preset fast -crf 23 -c:a libmp3lame -b:a 192k" ^
- -o "%%(title)s.mp4" ^
- "%URL%"
-
-if errorlevel 1 (
-    echo.
-    echo HATA: İndirme veya dönüştürme işlemi başarısız oldu.
-    echo Format listesi görmek için: yt-dlp -F "%URL%"
-)
-
-echo.
-echo İNDİRME TAMAMLANDI - Dosya konumu: %OUTDIR%
+echo === İŞLEM TAMAMLANDI! Çıktı dosyası: %FILENAME% ===
 pause
-exit /b
