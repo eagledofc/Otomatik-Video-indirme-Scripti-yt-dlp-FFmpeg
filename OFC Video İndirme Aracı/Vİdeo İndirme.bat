@@ -4,11 +4,11 @@ setlocal enabledelayedexpansion
 
 set "APPDIR=%LOCALAPPDATA%\VideoDownloader"
 set "YT_DLP_EXE=%APPDIR%\yt-dlp.exe"
-set "FFMPEG_DIR=%APPDIR%\ffmpeg\bin"
+set "FFMPEG_DIR=%APPDIR%\ffmpeg\ffmpeg-master-latest-win64-gpl-shared\bin"
 set "FFMPEG_EXE=%FFMPEG_DIR%\ffmpeg.exe"
 set "OUTDIR=%USERPROFILE%\Downloads"
 set "YTDLP_URL=https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe"
-set "FFMPEG_ZIP_URL=https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+set "FFMPEG_ZIP_URL=https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl-shared.zip"
 
 if not exist "%APPDIR%" mkdir "%APPDIR%"
 cd /d "%APPDIR%"
@@ -20,11 +20,11 @@ if exist "%YT_DLP_EXE%" (
     curl -L -o yt-dlp.exe "%YTDLP_URL%"
 )
 
-:: ffmpeg kontrol/güncelle (daha küçük ve hızlı paket)
+:: ffmpeg kontrol/güncelle
 if not exist "%FFMPEG_EXE%" (
     curl -L -o ffmpeg.zip "%FFMPEG_ZIP_URL%"
-    tar -xf ffmpeg.zip
-    for /d %%i in (ffmpeg-*) do set "FFMPEG_DIR=%APPDIR%\%%i\bin"
+    mkdir ffmpeg
+    tar -xf ffmpeg.zip -C ffmpeg
     del ffmpeg.zip
 )
 
@@ -39,13 +39,12 @@ if "%URL%"=="" (
 
 cd /D "%OUTDIR%"
 
-:: Video + ses indir, hızlı birleştir, kopyalama tercih et (re-encode yok!)
+:: Video + ses indir, Windows uyumlu MP4 oluştur (MP3 sesli)
 "%YT_DLP_EXE%" ^
  --ffmpeg-location "%FFMPEG_DIR%" ^
  -f "bv*+ba/bestvideo+bestaudio/best" ^
  --merge-output-format mp4 ^
- --remux-video mp4 ^
- --compat-options no-youtube-unavailable-videos ^
+ --postprocessor-args "ffmpeg:-c:v libx264 -preset fast -crf 23 -c:a libmp3lame -b:a 192k" ^
  -o "%%(title)s.mp4" ^
  "%URL%"
 
