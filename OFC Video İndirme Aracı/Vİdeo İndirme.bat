@@ -1,30 +1,61 @@
 @echo off
-REM === SUPER SIMPLE yt-dlp ONLY DOWNLOADER ===
+chcp 65001 >nul
+setlocal enabledelayedexpansion
 
-REM === Config ===
-set "YT_DLP=yt-dlp.exe"
-set "OUTPUT=output.%%(ext)s"
+set "APPDIR=%LOCALAPPDATA%\VideoDownloader"
+set "YT_DLP_EXE=%APPDIR%\yt-dlp.exe"
+set "FFMPEG_DIR=%APPDIR%\ffmpeg\bin"
+set "FFMPEG_EXE=%FFMPEG_DIR%\ffmpeg.exe"
+set "OUTDIR=%USERPROFILE%\Downloads"
+set "YTDLP_URL=https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe"
+set "FFMPEG_ZIP_URL=https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
-REM === Check yt-dlp ===
-if not exist "%YT_DLP%" (
-    echo yt-dlp.exe not found. Downloading latest version...
-    powershell -Command "Invoke-WebRequest -Uri 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe' -OutFile '%YT_DLP%'"
-    if not exist "%YT_DLP%" (
-        echo ERROR: yt-dlp.exe failed to download!
-        pause
-        exit /b
-    )
+if not exist "%APPDIR%" mkdir "%APPDIR%"
+cd /d "%APPDIR%"
+
+:: yt-dlp kontrol/güncelle
+if exist "%YT_DLP_EXE%" (
+    "%YT_DLP_EXE%" -U >nul
+) else (
+    curl -L -o yt-dlp.exe "%YTDLP_URL%"
 )
 
-REM === Ask URL ===
-set /p URL="Enter the video URL: "
+:: ffmpeg kontrol/güncelle (daha küçük ve hızlı paket)
+if not exist "%FFMPEG_EXE%" (
+    curl -L -o ffmpeg.zip "%FFMPEG_ZIP_URL%"
+    tar -xf ffmpeg.zip
+    for /d %%i in (ffmpeg-*) do set "FFMPEG_DIR=%APPDIR%\%%i\bin"
+    del ffmpeg.zip
+)
 
-REM === Download ===
 echo.
-echo Downloading...
-"%YT_DLP%" -f best --merge-output-format mp4 -o "%OUTPUT%" %URL%
+<nul set /p="Video URL'sini yapıştır: "
+set /P URL=
+if "%URL%"=="" (
+    echo URL girilmedi. Çıkılıyor...
+    pause
+    exit /b
+)
+
+cd /D "%OUTDIR%"
+
+:: Video + ses indir, hızlı birleştir, kopyalama tercih et (re-encode yok!)
+"%YT_DLP_EXE%" ^
+ --ffmpeg-location "%FFMPEG_DIR%" ^
+ -f "bv*+ba/bestvideo+bestaudio/best" ^
+ --merge-output-format mp4 ^
+ --remux-video mp4 ^
+ --compat-options no-youtube-unavailable-videos ^
+ -o "%%(title)s.mp4" ^
+ "%URL%"
+
+if errorlevel 1 (
+    echo.
+    echo HATA: İndirme veya dönüştürme işlemi başarısız oldu.
+    echo Format listesi görmek için: yt-dlp -F "%URL%"
+)
 
 echo.
-echo === DONE! ===
-echo Saved as: %OUTPUT%
+echo İNDİRME TAMAMLANDI - Dosya konumu: %OUTDIR%
 pause
+exit /b
