@@ -37,34 +37,23 @@ if "%URL%"=="" (
     exit /b
 )
 
-echo.
-echo İstediğin kaliteyi seç:
-echo [1] 720p (Hızlı, merge yok)
-echo [2] 1080p (Yüksek kalite, merge var)
-set /p QUALITY="Seçiminiz [1/2]: "
-
 :: Tarih damgası ekle (YılAyGün-SaatDakika)
 for /f "tokens=2 delims==." %%I in ('"wmic os get localdatetime /value"') do set ldt=%%I
 set "TIMESTAMP=%ldt:~0,4%-%ldt:~4,2%-%ldt:~6,2%_%ldt:~8,2%-%ldt:~10,2%"
 
 cd /D "%OUTDIR%"
 
-if "%QUALITY%"=="1" (
-    echo 720p seçildi: Tek parça, merge yok, hızlı indirme...
-    "%YT_DLP_EXE%" ^
-     -f "best[height<=720]" ^
-     -o "%%(title)s_%TIMESTAMP%.mp4" ^
-     "%URL%"
-) else (
-    echo 1080p seçildi: Yüksek kalite, merge hızlı mod...
-    "%YT_DLP_EXE%" ^
-     --ffmpeg-location "%FFMPEG_DIR%" ^
-     -f "bv*+ba/bestvideo+bestaudio/best" ^
-     --merge-output-format mp4 ^
-     --postprocessor-args "ffmpeg:-c:v libx264 -preset veryfast -crf 22 -c:a aac -b:a 192k -movflags +faststart" ^
-     -o "%%(title)s_%TIMESTAMP%.mp4" ^
-     "%URL%"
-)
+echo.
+echo En iyi kalite + en hızlı mod başlıyor...
+
+"%YT_DLP_EXE%" ^
+ --ffmpeg-location "%FFMPEG_DIR%" ^
+ -f "bv*+ba/bestvideo+bestaudio/best" ^
+ --merge-output-format mp4 ^
+ --concurrent-fragments 10 ^
+ --postprocessor-args "ffmpeg:-c:v libx264 -preset ultrafast -crf 23 -c:a aac -b:a 160k -movflags +faststart" ^
+ -o "%%(title)s_%TIMESTAMP%.mp4" ^
+ "%URL%"
 
 if errorlevel 1 (
     echo.
