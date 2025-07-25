@@ -60,3 +60,6 @@ Script tamamen açık ve şeffaftır. Not Defteri ile açarak içeriğini incele
 Her türlü öneri, katkı veya düzeltme için Issue açabilir veya Pull Request gönderebilirsiniz.
 
 Hazırlayan: [eagledofc](https://github.com/eagledofc)
+
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/eagledofc/Otomatik-Video-indirme-Scripti-yt-dlp-FFmpeg?utm_source=oss&utm_medium=github&utm_campaign=eagledofc%2FOtomatik-Video-indirme-Scripti-yt-dlp-FFmpeg&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+
