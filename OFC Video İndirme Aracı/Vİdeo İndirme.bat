@@ -73,7 +73,6 @@ set "FORMAT=bv*+ba/bestvideo+bestaudio/best"
 set "OUTPUT_TEMPLATE=%%(title)s_%TIMESTAMP%.mp4"
 set "EXTRA_ARGS="
 set "JS_RUNTIME_ARGS="
-
 where node >nul 2>&1 && set "JS_RUNTIME_ARGS=--js-runtimes nodejs,deno"
 
 cd /D "%OUTDIR%"
@@ -101,18 +100,11 @@ set "YTDLP_CONFIG=%APPDIR%\yt-dlp.conf"
     if not "%EXTRA_ARGS%"=="" echo %EXTRA_ARGS%
 ) > "%YTDLP_CONFIG%"
 
-call :download_with_cookies chrome
+call :download_video
 
 if errorlevel 1 (
     echo.
-    echo Chrome cookies ile basarisiz oldu. Edge ile tekrar denenecek...
-    call :download_with_cookies edge
-)
-
-if errorlevel 1 (
-    echo.
-    echo HATA: Indirme basarisiz oldu. YouTube bot kontrolu nedeniyle cookies gerekebilir.
-    echo Manuel cookies icin: yt-dlp --cookies "C:\path\cookies.txt" "%URL%"
+    echo HATA: Indirme basarisiz oldu.
     echo Format listesi görmek için: yt-dlp -F "%URL%"
 )
 
@@ -121,7 +113,6 @@ echo İNDİRME TAMAMLANDI - Dosya konumu: %OUTDIR%
 pause
 exit /b
 
-:download_with_cookies
-set "BROWSER=%~1"
-call "%YT_DLP_EXE%" --config-location "%YTDLP_CONFIG%" --cookies-from-browser %BROWSER% "%URL%"
+:download_video
+call "%YT_DLP_EXE%" --config-location "%YTDLP_CONFIG%" "%URL%"
 exit /b
