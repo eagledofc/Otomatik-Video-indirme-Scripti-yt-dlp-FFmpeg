@@ -1,3 +1,8 @@
+diff --git a/OFC Video İndirme Aracı/Vİdeo İndirme.bat b/OFC Video İndirme Aracı/Vİdeo İndirme.bat
+index d79eede31b74c484a3207ee041425467afe923b3..377857c3e7fbc10b402e2ad7aaaaac0c8eecc048 100644
+--- a/OFC Video İndirme Aracı/Vİdeo İndirme.bat	
++++ b/OFC Video İndirme Aracı/Vİdeo İndirme.bat	
+@@ -1,68 +1,143 @@
  @echo off
  chcp 65001 >nul
  setlocal enabledelayedexpansion
@@ -179,6 +184,3 @@
  echo İNDİRME TAMAMLANDI - Dosya konumu: %OUTDIR%
  pause
  exit /b
- 
-EOF
-)
