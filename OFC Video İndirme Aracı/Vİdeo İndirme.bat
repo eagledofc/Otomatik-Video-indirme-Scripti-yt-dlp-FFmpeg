@@ -81,14 +81,12 @@ cd /D "%OUTDIR%"
 echo.
 echo Indirme basliyor... (Otomatik en iyi kalite + hizli mod)
 
-set "BASE_ARGS=--no-mtime --ffmpeg-location ""%FFMPEG_DIR%"" --restrict-filenames --downloader aria2c --downloader-args ""aria2c:-x16 -s16 -k1M"" -f ""%FORMAT%"" --merge-output-format mp4 --concurrent-fragments 10 --retries 10 --fragment-retries 10 --retry-sleep 5 --socket-timeout 30 --postprocessor-args ""ffmpeg:-c:v libx264 -preset ultrafast -crf 23 -c:a aac -b:a 160k -movflags +faststart"" -o ""%OUTPUT_TEMPLATE%"""
-
-call "%YT_DLP_EXE%" !BASE_ARGS! --cookies-from-browser chrome !JS_RUNTIME_ARGS! !EXTRA_ARGS! "%URL%"
+call :download_with_cookies chrome
 
 if errorlevel 1 (
     echo.
     echo Chrome cookies ile basarisiz oldu. Edge ile tekrar denenecek...
-    call "%YT_DLP_EXE%" !BASE_ARGS! --cookies-from-browser edge !JS_RUNTIME_ARGS! !EXTRA_ARGS! "%URL%"
+    call :download_with_cookies edge
 )
 
 if errorlevel 1 (
@@ -101,4 +99,27 @@ if errorlevel 1 (
 echo.
 echo İNDİRME TAMAMLANDI - Dosya konumu: %OUTDIR%
 pause
+exit /b
+
+:download_with_cookies
+set "BROWSER=%~1"
+call "%YT_DLP_EXE%" ^
+ --no-mtime ^
+ --ffmpeg-location "%FFMPEG_DIR%" ^
+ --restrict-filenames ^
+ --downloader aria2c ^
+ --downloader-args "aria2c:-x16 -s16 -k1M" ^
+ -f "%FORMAT%" ^
+ --merge-output-format mp4 ^
+ --concurrent-fragments 10 ^
+ --retries 10 ^
+ --fragment-retries 10 ^
+ --retry-sleep 5 ^
+ --socket-timeout 30 ^
+ --postprocessor-args "ffmpeg:-c:v libx264 -preset ultrafast -crf 23 -c:a aac -b:a 160k -movflags +faststart" ^
+ --cookies-from-browser %BROWSER% ^
+ %JS_RUNTIME_ARGS% ^
+ %EXTRA_ARGS% ^
+ -o "%OUTPUT_TEMPLATE%" ^
+ "%URL%"
 exit /b
