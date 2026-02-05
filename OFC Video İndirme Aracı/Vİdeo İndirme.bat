@@ -179,4 +179,6 @@
  echo İNDİRME TAMAMLANDI - Dosya konumu: %OUTDIR%
  pause
  exit /b
-
+ 
+EOF
+)
