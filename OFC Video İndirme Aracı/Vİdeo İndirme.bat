@@ -86,10 +86,10 @@ set "YTDLP_CONFIG=%APPDIR%\yt-dlp.conf"
     echo --ffmpeg-location "%FFMPEG_DIR%"
     echo --restrict-filenames
     echo --downloader aria2c
-    echo --downloader-args "aria2c:-x16 -s16 -k1M"
+    echo --downloader-args "aria2c:-x16 -s16 -k1M --file-allocation=none --enable-mmap=true"
     echo -f "%FORMAT%"
     echo --merge-output-format mp4
-    echo --concurrent-fragments 10
+    echo --concurrent-fragments 16
     echo --retries 10
     echo --fragment-retries 10
     echo --retry-sleep 5
