@@ -58,7 +58,7 @@ if not exist "%ARIA2_EXE%" (
 )
 
 echo.
-<nul set /p="Video URL'sini yapıştır: "
+<nul set /p="YouTube URL'sini yapıştır: "
 set /P URL=
 if "%URL%"=="" (
     echo URL girilmedi. Çıkılıyor...
@@ -69,54 +69,19 @@ if "%URL%"=="" (
 :: Tarih damgası ekle (YılAyGün-SaatDakika)
 for /f %%I in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd_HH-mm"') do set "TIMESTAMP=%%I"
 
-echo.
-echo Indirme modu sec:
-echo 1^) En hizli + en iyi kalite (onerilen)
-echo 2^) 1080p (eger mevcutsa)
-echo 3^) 720p (eger mevcutsa)
-echo 4^) Sadece ses (mp3)
-<nul set /p="Secim (1-4): "
-set /P MODE=
-if "%MODE%"=="" set "MODE=1"
-
 set "FORMAT=bv*+ba/bestvideo+bestaudio/best"
 set "OUTPUT_TEMPLATE=%%(title)s_%TIMESTAMP%.mp4"
 set "EXTRA_ARGS="
-set "COOKIE_ARGS="
 set "JS_RUNTIME_ARGS="
-if "%MODE%"=="2" (
-    set "FORMAT=bv*[height<=1080]+ba/best[height<=1080]/best"
-) else if "%MODE%"=="3" (
-    set "FORMAT=bv*[height<=720]+ba/best[height<=720]/best"
-) else if "%MODE%"=="4" (
-    set "FORMAT=ba/best"
-    set "OUTPUT_TEMPLATE=%%(title)s_%TIMESTAMP%.mp3"
-    set "EXTRA_ARGS=--extract-audio --audio-format mp3 --audio-quality 0"
-)
-
-echo.
-echo Cookie modu sec (YouTube bazen giris ister):
-echo 1^) Chrome'dan cookies al (onerilen)
-echo 2^) Edge'den cookies al
-echo 3^) Yok (bazi videolarda hata verebilir)
-<nul set /p="Secim (1-3): "
-set /P COOKIE_MODE=
-if "%COOKIE_MODE%"=="" set "COOKIE_MODE=1"
-
-if "%COOKIE_MODE%"=="1" (
-    set "COOKIE_ARGS=--cookies-from-browser chrome"
-) else if "%COOKIE_MODE%"=="2" (
-    set "COOKIE_ARGS=--cookies-from-browser edge"
-)
 
 where node >nul 2>&1 && set "JS_RUNTIME_ARGS=--js-runtimes nodejs,deno"
 
 cd /D "%OUTDIR%"
 
 echo.
-echo Indirme basliyor... (Desteklenen siteler: yt-dlp destekli bircok video sitesi)
+echo Indirme basliyor... (Otomatik en iyi kalite + hizli mod)
 
-"%YT_DLP_EXE%" ^
+call "%YT_DLP_EXE%" ^
  --no-mtime ^
  --ffmpeg-location "%FFMPEG_DIR%" ^
  --restrict-filenames ^
@@ -125,8 +90,12 @@ echo Indirme basliyor... (Desteklenen siteler: yt-dlp destekli bircok video site
  -f "%FORMAT%" ^
  --merge-output-format mp4 ^
  --concurrent-fragments 10 ^
+ --retries 10 ^
+ --fragment-retries 10 ^
+ --retry-sleep 5 ^
+ --socket-timeout 30 ^
  --postprocessor-args "ffmpeg:-c:v libx264 -preset ultrafast -crf 23 -c:a aac -b:a 160k -movflags +faststart" ^
- %COOKIE_ARGS% ^
+ --cookies-from-browser chrome ^
  %JS_RUNTIME_ARGS% ^
  %EXTRA_ARGS% ^
  -o "%OUTPUT_TEMPLATE%" ^
@@ -134,7 +103,32 @@ echo Indirme basliyor... (Desteklenen siteler: yt-dlp destekli bircok video site
 
 if errorlevel 1 (
     echo.
-    echo HATA: İndirme veya dönüştürme işlemi başarısız oldu.
+    echo Chrome cookies ile basarisiz oldu. Edge ile tekrar denenecek...
+    call "%YT_DLP_EXE%" ^
+     --no-mtime ^
+     --ffmpeg-location "%FFMPEG_DIR%" ^
+     --restrict-filenames ^
+     --downloader aria2c ^
+     --downloader-args "aria2c:-x16 -s16 -k1M" ^
+     -f "%FORMAT%" ^
+     --merge-output-format mp4 ^
+     --concurrent-fragments 10 ^
+     --retries 10 ^
+     --fragment-retries 10 ^
+     --retry-sleep 5 ^
+     --socket-timeout 30 ^
+     --postprocessor-args "ffmpeg:-c:v libx264 -preset ultrafast -crf 23 -c:a aac -b:a 160k -movflags +faststart" ^
+     --cookies-from-browser edge ^
+     %JS_RUNTIME_ARGS% ^
+     %EXTRA_ARGS% ^
+     -o "%OUTPUT_TEMPLATE%" ^
+     "%URL%"
+)
+
+if errorlevel 1 (
+    echo.
+    echo HATA: Indirme basarisiz oldu. YouTube bot kontrolu nedeniyle cookies gerekebilir.
+    echo Manuel cookies icin: yt-dlp --cookies "C:\path\cookies.txt" "%URL%"
     echo Format listesi görmek için: yt-dlp -F "%URL%"
 )
 
