@@ -81,6 +81,26 @@ cd /D "%OUTDIR%"
 echo.
 echo Indirme basliyor... (Otomatik en iyi kalite + hizli mod)
 
+set "YTDLP_CONFIG=%APPDIR%\yt-dlp.conf"
+(
+    echo --no-mtime
+    echo --ffmpeg-location "%FFMPEG_DIR%"
+    echo --restrict-filenames
+    echo --downloader aria2c
+    echo --downloader-args "aria2c:-x16 -s16 -k1M"
+    echo -f "%FORMAT%"
+    echo --merge-output-format mp4
+    echo --concurrent-fragments 10
+    echo --retries 10
+    echo --fragment-retries 10
+    echo --retry-sleep 5
+    echo --socket-timeout 30
+    echo --postprocessor-args "ffmpeg:-c:v libx264 -preset ultrafast -crf 23 -c:a aac -b:a 160k -movflags +faststart"
+    echo -o "%OUTPUT_TEMPLATE%"
+    if not "%JS_RUNTIME_ARGS%"=="" echo %JS_RUNTIME_ARGS%
+    if not "%EXTRA_ARGS%"=="" echo %EXTRA_ARGS%
+) > "%YTDLP_CONFIG%"
+
 call :download_with_cookies chrome
 
 if errorlevel 1 (
@@ -103,23 +123,5 @@ exit /b
 
 :download_with_cookies
 set "BROWSER=%~1"
-call "%YT_DLP_EXE%" ^
- --no-mtime ^
- --ffmpeg-location "%FFMPEG_DIR%" ^
- --restrict-filenames ^
- --downloader aria2c ^
- --downloader-args "aria2c:-x16 -s16 -k1M" ^
- -f "%FORMAT%" ^
- --merge-output-format mp4 ^
- --concurrent-fragments 10 ^
- --retries 10 ^
- --fragment-retries 10 ^
- --retry-sleep 5 ^
- --socket-timeout 30 ^
- --postprocessor-args "ffmpeg:-c:v libx264 -preset ultrafast -crf 23 -c:a aac -b:a 160k -movflags +faststart" ^
- --cookies-from-browser %BROWSER% ^
- %JS_RUNTIME_ARGS% ^
- %EXTRA_ARGS% ^
- -o "%OUTPUT_TEMPLATE%" ^
- "%URL%"
+call "%YT_DLP_EXE%" --config-location "%YTDLP_CONFIG%" --cookies-from-browser %BROWSER% "%URL%"
 exit /b
